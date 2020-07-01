@@ -11,8 +11,8 @@ LABEL github="https://github.com/bitcoincore-dev/statoshi"
 LABEL maintainer="admin@bitcoincore.dev"
 
 RUN apk update && apk upgrade && apk add -v musl busybox bash-completion git
-RUN apk -U add -v coreutils
-RUN apk add --update -v nodejs nodejs-npm
+RUN apk -U add --no-cache -v coreutils
+RUN apk add --no-cache --update -v nodejs nodejs-npm
 
 #NOTE: simply exposing the ports in the dockerfile isnt enough
 #REF:  https://www.ctl.io/developers/blog/post/docker-networking-rules
@@ -55,7 +55,7 @@ RUN set -ex \
     && addgroup -S grafana \
     && adduser -S -G grafana grafana \
     #&& apk add --no-cache libc6-compat ca-certificates su-exec bash
-    && apk add -v libc6-compat su-exec
+    && apk add --no-cache -v libc6-compat su-exec
 
 #NOTE Once /tmp/grafana is copied to GF_PATHS_HOME we are free to modify the default configuration
 COPY --from=grafana-config /tmp/grafana "$GF_PATHS_HOME"
@@ -93,7 +93,7 @@ FROM set-grafana-env as apk-add-packages1
 WORKDIR /
 
 RUN apk update && apk upgrade
-RUN apk add -v \
+RUN apk add --no-cache -v \
     autoconf \
     automake \
     binutils \
@@ -110,7 +110,7 @@ RUN apk add -v \
     py3-psutil \
     vim
 
-RUN apk add -v \
+RUN apk add --no-cache -v \
     g++ \
     build-base \
     boost-libs \
@@ -138,7 +138,7 @@ RUN df -H
 FROM apk-add-packages1 as apk-add-packages2
 ###########################################
 
-RUN apk add -v \
+RUN apk add --no-cache -v \
       cairo \
       collectd \
       collectd-disk \
@@ -174,7 +174,7 @@ RUN df -H
 FROM apk-add-packages2 as apk-add-packages3
 ###########################################
 
-RUN apk add -v \
+RUN apk add --no-cache -v \
       alpine-sdk \
       git \
       libffi-dev \
